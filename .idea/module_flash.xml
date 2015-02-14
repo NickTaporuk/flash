@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_flash" default="compile.module.flash">
+  <dirname property="module.flash.basedir" file="${ant.file.module_flash}"/>
+  
+  <property name="module.jdk.home.flash" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.flash" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.flash" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.flash" value="-encoding UTF-8 -source 1.6 ${compiler.args}"/>
+  
+  <property name="flash.output.dir" value="undefined"/>
+  <property name="flash.testoutput.dir" value="undefined"/>
+  
+  <path id="flash.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="flash.module.production.classpath">
+    <path refid="${module.jdk.classpath.flash}"/>
+  </path>
+  
+  <path id="flash.runtime.production.module.classpath"/>
+  
+  <path id="flash.module.classpath">
+    <path refid="${module.jdk.classpath.flash}"/>
+  </path>
+  
+  <path id="flash.runtime.module.classpath"/>
+  
+  
+  <patternset id="excluded.from.module.flash">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.flash">
+    <patternset refid="excluded.from.module.flash"/>
+  </patternset>
+  
+  
+  <target name="compile.module.flash" depends="compile.module.flash.production,compile.module.flash.tests" description="Compile module flash"/>
+  
+  <target name="compile.module.flash.production" depends="register.custom.compilers" description="Compile module flash; production classes"/>
+  
+  <target name="compile.module.flash.tests" depends="register.custom.compilers,compile.module.flash.production" description="compile module flash; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.flash" description="cleanup module">
+    <delete dir="${flash.output.dir}"/>
+    <delete dir="${flash.testoutput.dir}"/>
+  </target>
+</project>
