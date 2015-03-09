@@ -1,0 +1,13 @@
+import flash.net.URLLoader;
+import flash.netURLRequest;
+import flash.events.Event;
+import flash.display.MovieClip;
+var xmlLoader:URLLoader = new URLLoader(new URLRequest('xml.xml'));
+var xmlFile:XML;
+xmlLoader.addEventListener(Event.COMPELE,onCompleteXMLLoader); 
+
+
+function onCompleteXMLLoader(e:Event):void
+{
+	xmlFile = new XML(xmlLoader.data);
+}
