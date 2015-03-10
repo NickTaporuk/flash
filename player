@@ -1,0 +1,95 @@
+import fl.video.*;
+import flash.events.Event;
+import flash.net.*;
+
+//###############################
+stop();
+//###############################
+
+// Set Variables
+var flvControl:FLVPlayback = display;
+var flvIndex:Number = 0;
+var loopAtEnd:Boolean = true;
+trace('stage.width:',stage.width);
+trace('stage.height:',stage.height);
+// Load XML file...
+var xmlList:XML;
+var list:XMLList;
+var xmlPath:String = "xml.xml";
+var xmlLoader:URLLoader = new URLLoader();
+xmlLoader.load(new URLRequest(xmlPath));
+
+// Load image...
+var defaultImage:Bitmap;
+var defaultImagePath:String = "trumb/1.jpg";
+var defaultImageLoader:Loader = new Loader();
+defaultImageLoader.load(new URLRequest(defaultImagePath));
+
+// Receive the XML and load the first video
+function xmlLoadedHandler(event:Event):void
+{
+		// Save XML
+	xmlList = new XML(xmlLoader.data);
+	trace('xmlLoader.data:',xmlList.video[0].@url);
+	flvControl.source = xmlList.video[0].@url//var video = XMLList.@video;
+	//trace('video :',video);
+	// Set video (Start)
+	//flvControl.source = xmlList.video[0];
+}
+
+
+// 3. Handle video completion (load next video)
+function completeHandler(event:VideoEvent):void
+{
+	//trace(xmlList.video.length());
+	// Get next item in list
+	/*flvIndex++;
+	
+	// Validate index																																																																																																																																																																															
+	if( flvIndex == xmlList.video.length() ){
+		if( loopAtEnd ){
+			flvIndex = 0;
+		}else{
+			return;
+		}
+	}
+	// Load next video*/
+	//flvControl.source = xmlList.video[0].@url;
+}
+//flvControl.addEventListener(VideoEvent.COMPLETE, completeHandler);
+
+// Determine when to show the image...
+function enterFrameHandler(event:Event):void
+{
+	// If the video is stopped on frame 1, show the image
+	defaultImage.visible = display.playheadTime < 0.2;
+}
+// Handle image positioning when loaded...
+function defaultImageHandler(event:Event):void
+{
+	// Position with video...
+	defaultImage = event.currentTarget.content as Bitmap;
+	trace('width:',display.width/4);
+	trace('height:',display.height/4);
+	defaultImage.x = (display.width/4);
+	defaultImage.y = (display.height/4);
+	addChild(defaultImage);
+	
+	// Monitor the video
+	addEventListener(Event.ENTER_FRAME, enterFrameHandler);
+}
+defaultImageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, defaultImageHandler);
+
+// Load the video...
+flvControl.autoPlay = false;
+flvControl.autoRewind = true;
+flvControl.scaleMode = VideoScaleMode.NO_SCALE;
+//flvControl.source = flvSource;
+xmlLoader.addEventListener(Event.COMPLETE, xmlLoadedHandler);
+//xmlLoader.addEventListener(Event.COMPLETE, defaultImageHandler);
+//defaultImage.addEventListener(Event.CLICK,imageClickHandler);
+
+/*function imageClickHandler(e:Event):void
+{
+	//trace('e:',e);	
+}*/
